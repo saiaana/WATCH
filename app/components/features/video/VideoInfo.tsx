@@ -14,6 +14,7 @@ function VideoInfo({ content, isPlaying = false }: VideoInfoProps) {
   const title = getContentTitle(content);
   const rating = content.vote_average ? content.vote_average.toFixed(1) : '0.0';
 
+
   return (
     <div
       className={cn(

@@ -14,9 +14,12 @@ import LoadingOverlay from './layers/LoadingOverlay';
 import PlayIndicator from './layers/PlayIndicator';
 import FullscreenButton from './layers/FullscreenButton';
 import FullscreenVideoModal from './layers/FullscreenVideoModal';
+import { usePathname, useRouter } from 'next/navigation';
 
 function VideoWidget({ content }: { content: MediaContent }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const title = getContentTitle(content);
   const { trailerUrl, isLoading } = useTrailer(title, isPlaying);
@@ -37,12 +40,17 @@ function VideoWidget({ content }: { content: MediaContent }) {
       open();
     }
   };
+  
+  const handleClick = () => {
+    router.push(`${pathname}/${content.id}`);
+  };
 
   return (
     <div
-      className="card-hover aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl"
+      className="card-hover transition-transform duration-300 ease-out aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl"
       onMouseEnter={() => setIsPlaying(true)}
       onMouseLeave={() => setIsPlaying(false)}
+      onClick={handleClick}
     >
       <div className="video-container-base">
         <PosterLayer content={content} visible={showPoster} />
