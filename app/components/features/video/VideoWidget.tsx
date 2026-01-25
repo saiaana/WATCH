@@ -54,7 +54,7 @@ function VideoWidget({ content }: { content: MediaContent }) {
             onReady={() => setReady(true)}
           />
         )}
-        <VideoInfo content={content} isPlaying={isPlaying} />
+        <VideoInfo content={content} isPlaying={isPlaying}/>
         {showLoading && <LoadingOverlay />}
         {showPlayIndicator && <PlayIndicator />}
         {showFullscreenButton && <FullscreenButton onClick={handleFullscreenClick} />}

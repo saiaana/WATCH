@@ -19,7 +19,7 @@ function VideoInfo({ content, isPlaying = false }: VideoInfoProps) {
       className={cn(
         'absolute bottom-0 left-0 right-0 z-30 rounded-xl bg-gradient-to-t from-black/95 via-black/70 to-transparent',
         'p-4 transition-all duration-300 sm:p-5',
-        isPlaying ? 'opacity-90' : 'opacity-100',
+        isPlaying ? 'opacity-0' : 'opacity-100',
       )}
     >
       <h3 className="mb-2 line-clamp-2 text-base font-bold leading-tight text-white sm:text-lg">
