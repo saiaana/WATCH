@@ -46,20 +46,35 @@ export default function ContentTypePageClient({
     cacheKey: 'critical_popular_tv_shows',
   });
 
-  const result = contentType === 'movie' ? moviesResult : tvShowsResult;
-  const popular = contentType === 'movie' ? moviesResult.items : tvShowsResult.items;
-
   const basePath = contentType === 'movie' ? '/movies' : '/tvshows';
 
+  if (contentType === 'movie') {
+    return (
+      <ContentPageClient<Movie>
+        basePath={basePath}
+        contentType={contentType}
+        useCritical={() => ({
+          popular: moviesResult.items,
+          genres: moviesResult.genres,
+          isLoading: moviesResult.isLoading,
+          error: moviesResult.error,
+        })}
+        lazySections={lazySections}
+        videoSection={videoSection}
+        trendingTitle={trendingTitle}
+      />
+    );
+  }
+
   return (
-    <ContentPageClient
+    <ContentPageClient<TvShow>
       basePath={basePath}
       contentType={contentType}
       useCritical={() => ({
-        popular,
-        genres: result.genres,
-        isLoading: result.isLoading,
-        error: result.error,
+        popular: tvShowsResult.items,
+        genres: tvShowsResult.genres,
+        isLoading: tvShowsResult.isLoading,
+        error: tvShowsResult.error,
       })}
       lazySections={lazySections}
       videoSection={videoSection}

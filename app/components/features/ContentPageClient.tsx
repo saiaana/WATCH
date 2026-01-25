@@ -5,7 +5,7 @@ import FeaturedHero from '@/app/components/features/hero/featured/FeaturedHero';
 import HeroSkeleton from '@/app/components/features/hero/HeroSkeleton';
 import ContentCardSlider from '@/app/components/features/content/ContentCardSlider';
 import LazyContentSection from '@/app/components/features/content/LazyContentSection';
-import LazyVideoGridSection from '@/app/components/features/content/LazyVideoGridSection';
+//import LazyVideoGridSection from '@/app/components/features/content/LazyVideoGridSection';
 
 import { useContentNavigation } from '@/hooks/ui/useContentNavigation';
 import { useContentSliderItems } from '@/hooks/content/useContentSliderItems';
@@ -44,7 +44,7 @@ export default function ContentPageClient<T extends MediaContent>({
   contentType,
   useCritical,
   lazySections,
-  videoSection,
+  // videoSection,
   trendingTitle = 'Trending',
 }: ContentPageClientProps<T>) {
   const { popular, genres, isLoading, error } = useCritical();
@@ -100,14 +100,14 @@ export default function ContentPageClient<T extends MediaContent>({
           />
         ))}
 
-        <div className="mt-16 md:mt-20">
+        {/* <div className="mt-16 md:mt-20">
           <LazyVideoGridSection
             category={videoSection.category}
             title={videoSection.title}
             contentType={contentType}
             isCriticalLoading={isLoading}
           />
-        </div>
+        </div> */}
       </div>
 
       {error && (
