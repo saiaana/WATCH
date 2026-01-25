@@ -6,6 +6,7 @@ import SectionHeader from '@/app/components/ui/SectionHeader';
 import CarouselContainer from '@/app/components/ui/CarouselContainer';
 import VideoGridLayout from './VideoGridLayout';
 import { MediaContent } from '@/types/media';
+import { dedupeById } from '@/helpers/dedupeById';
 
 type VideoWidgetGridProps = {
   sectionTitle: string;
@@ -13,7 +14,8 @@ type VideoWidgetGridProps = {
 };
 
 function VideoWidgetGrid({ content, sectionTitle }: VideoWidgetGridProps) {
-  const items = useMemo(() => content.slice(0, 15), [content]);
+  const uniqueContent = useMemo(() => dedupeById(content), [content]);
+  const items = useMemo(() => uniqueContent.slice(0, 15), [uniqueContent]);
 
   if (items.length === 0) return null;
 
@@ -21,8 +23,8 @@ function VideoWidgetGrid({ content, sectionTitle }: VideoWidgetGridProps) {
 
   const videos = (
     <CarouselContainer padding={false}>
-      {items.map((item) => (
-        <div key={item.id} className="relative w-[220px] shrink-0 sm:w-[260px] md:w-[300px]">
+      {items.map((item, index) => (
+        <div key={`${sectionTitle}-${item.id}-${index}`} className="relative w-[220px] shrink-0 sm:w-[260px] md:w-[300px]">
           <VideoWidget content={item} />
         </div>
       ))}

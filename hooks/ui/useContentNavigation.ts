@@ -11,9 +11,9 @@ export function useContentNavigation() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    if (pathname === '/movies') {
+    if (pathname.startsWith('/movies')) {
       sessionStorage.setItem(LAST_CONTENT_PAGE_KEY, 'movie');
-    } else if (pathname === '/tvshows') {
+    } else if (pathname.startsWith('/tvshows')) {
       sessionStorage.setItem(LAST_CONTENT_PAGE_KEY, 'tv');
     }
   }, [pathname]);

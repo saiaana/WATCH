@@ -2,24 +2,22 @@
 
 import React, { memo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store';
 import TheaterComedyRoundedIcon from '@mui/icons-material/TheaterComedyRounded';
 import { getLastContentPage } from '@/hooks/ui/useContentNavigation';
 
 const LogoComponent = () => {
   const router = useRouter();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isAuthenticated = Boolean(user);
 
   const navigateHome = () => {
-    if (!isAuthenticated) {
-      router.push('/');
-      return;
-    }
-
     const lastContentPage = getLastContentPage();
-    router.push(lastContentPage === 'tv' ? '/tvshows' : '/movies');
+    
+    if (lastContentPage === 'tv') {
+      router.push('/tvshows');
+    } else if (lastContentPage === 'movie') {
+      router.push('/movies');
+    } else {
+      router.push('/');
+    }
   };
 
   return (

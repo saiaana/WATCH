@@ -34,8 +34,8 @@ function ContentCardSlider({ items, sectionTitle, path, title, basePath }: Conte
         <SectionHeader title={sectionTitle} variant="large" showIcon />
         <div className="mt-6 sm:mt-8">
           <CarouselContainer>
-            {items.map((item) => (
-              <div key={item.id} className="w-[240px]">
+            {items.map((item, index) => (
+              <div key={`${sectionTitle}-${item.id}-${index}`} className="w-[240px]">
                 <ContentCard
                   item={item.cardItem}
                   linkTo={getContentLink(item.id, item.cardItem.contentType)}
