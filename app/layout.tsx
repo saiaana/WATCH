@@ -6,6 +6,7 @@ import AuthInitializer from '@/app/components/features/auth/AuthInitializer';
 import GenresInitializer from '@/app/components/features/genre/GenresInitializer';
 import FavoritesInitializer from '@/app/components/features/favorites/FavoritesInitializer';
 import AppLayout from '@/app/components/layout/AppLayout';
+import Script from 'next/script';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -21,6 +22,18 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+        strategy="afterInteractive"
+      />
+      <Script id="ga-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-ZL96FLEBQL');
+        `}
+      </Script>
       <body className={`min-h-screen ${poppins.variable} bg-black text-white antialiased`}>
         <ClientProviders>
           <AuthInitializer />
