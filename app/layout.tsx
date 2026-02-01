@@ -6,7 +6,7 @@ import AuthInitializer from '@/app/components/features/auth/AuthInitializer';
 import GenresInitializer from '@/app/components/features/genre/GenresInitializer';
 import FavoritesInitializer from '@/app/components/features/favorites/FavoritesInitializer';
 import AppLayout from '@/app/components/layout/AppLayout';
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -23,22 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`min-h-screen ${poppins.variable} bg-black text-white antialiased`}>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-ZL96FLEBQL"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="ga-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-ZL96FLEBQL');
-            `,
-          }}
-        />
+        <GoogleAnalytics gaId="G-ZL96FLEBQL" />
         <ClientProviders>
           <AuthInitializer />
           <GenresInitializer />
