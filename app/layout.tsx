@@ -23,13 +23,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`min-h-screen ${poppins.variable} bg-black text-white antialiased`}>
-        <GoogleAnalytics gaId="G-ZL96FLEBQL" />
         <ClientProviders>
           <AuthInitializer />
           <GenresInitializer />
           <FavoritesInitializer />
           <AppLayout>{children}</AppLayout>
         </ClientProviders>
+      <GoogleAnalytics gaId="G-ZL96FLEBQL" />
       </body>
     </html>
   );
