@@ -22,19 +22,23 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-ZL96FLEBQL"
-        strategy="afterInteractive"
-      />
-      <Script id="ga-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-ZL96FLEBQL');
-        `}
-      </Script>
       <body className={`min-h-screen ${poppins.variable} bg-black text-white antialiased`}>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZL96FLEBQL"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-ZL96FLEBQL');
+            `,
+          }}
+        />
         <ClientProviders>
           <AuthInitializer />
           <GenresInitializer />

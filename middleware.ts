@@ -17,11 +17,11 @@ export function middleware(request: NextRequest) {
   // Content Security Policy (basic, can be customized)
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com", // YouTube iframe API
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com https://www.googletagmanager.com", // YouTube iframe API + Google Analytics
     "style-src 'self' 'unsafe-inline'", // 'unsafe-inline' needed for Tailwind
     "img-src 'self' data: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://api.themoviedb.org https://*.supabase.co https://api.openai.com https://www.googleapis.com",
+    "connect-src 'self' https://api.themoviedb.org https://*.supabase.co https://api.openai.com https://www.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com", // Google Analytics
     "frame-src 'self' https://www.youtube.com",
     "media-src 'self' https://www.youtube.com",
   ].join('; ');
