@@ -3,6 +3,7 @@
 import { memo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import LoadingSpinner from '@/app/components/ui/LoadingSpinner';
 
 interface PosterProps {
   src: string;
@@ -22,6 +23,7 @@ function Poster({
   priority = false,
 }: PosterProps) {
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   if (!src || error) {
     return (
@@ -33,6 +35,11 @@ function Poster({
 
   return (
     <div className="relative h-full w-full">
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-900/50">
+          <LoadingSpinner size="sm" />
+        </div>
+      )}
       <Image
         src={src}
         alt={alt}
@@ -46,7 +53,11 @@ function Poster({
           visible ? 'scale-100 opacity-100' : 'scale-105 opacity-0',
           className,
         )}
-        onError={() => setError(true)}
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setError(true);
+          setIsLoading(false);
+        }}
         style={{ willChange: 'transform' }}
       />
     </div>

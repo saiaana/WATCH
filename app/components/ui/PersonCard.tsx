@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import Image from 'next/image';
 
 import { getActorLink } from '@/helpers/routes';
@@ -8,6 +8,7 @@ import { getProfileUrl } from '@/helpers/getTmdbImageUrl';
 import ContentCardLayout from '@/app/components/features/content/ContentCardLayout';
 import GradientLine from '@/app/components/ui/GradientLine';
 import Badge from '@/app/components/ui/Badge';
+import LoadingSpinner from '@/app/components/ui/LoadingSpinner';
 
 interface PersonCardProps {
   id: number;
@@ -18,6 +19,7 @@ interface PersonCardProps {
 }
 
 function PersonCard({ id, name, profilePath, knownForDepartment, character }: PersonCardProps) {
+  const [isLoading, setIsLoading] = useState(true);
   const imageUrl = profilePath ? getProfileUrl(profilePath, 'w500') : '/poster.png';
 
   const departmentLabel =
@@ -32,12 +34,19 @@ function PersonCard({ id, name, profilePath, knownForDepartment, character }: Pe
       linkTo={getActorLink(id, name)}
       poster={
         <div className="relative h-full w-full">
+          {isLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-900/50">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
           <Image
             src={imageUrl}
             alt={name}
             fill
             sizes="(max-width: 768px) 50vw, 20vw"
             className="object-cover"
+            onLoad={() => setIsLoading(false)}
+            onError={() => setIsLoading(false)}
           />
         </div>
       }
