@@ -4,19 +4,7 @@ import { validateSearchQuery } from '@/lib/middleware/validation';
 import { checkRateLimit, getClientIP } from '@/lib/middleware/rate-limit';
 import { tmdbClient } from '@/lib/server/tmdb-client';
 import type { TMDBMovie, TMDBTvShow } from '@/lib/server/tmdb-client';
-
-interface OpenAIResponse {
-  choices: Array<{
-    message: {
-      content: string;
-    };
-  }>;
-}
-
-interface Recommendations {
-  movies?: string[];
-  tvShows?: string[];
-}
+import { getAIRecommendations } from '@/ai/aiService';
 
 export async function POST(req: Request) {
   try {
@@ -43,7 +31,7 @@ export async function POST(req: Request) {
           },
         },
       );
-    }
+    } 
 
     const body = await req.json();
     const { prompt: promptRaw } = body;
@@ -55,76 +43,17 @@ export async function POST(req: Request) {
     }
     const prompt = promptValidation.value!;
 
-    // OpenAI config
-    const openAiUrl =
-      process.env.OPEN_AI_API_URL || 'https://api.openai.com/v1/chat/completions';
-    const openAiKey = process.env.OPEN_AI_API_KEY;
-
-    if (!openAiKey) {
-      return createErrorResponse('OpenAI API key is not configured', 500, true);
-    }
-
-    // OpenAI request
-    const openAiRequestBody = {
-      model: 'gpt-4.1-mini',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a recommendation engine. Output valid JSON only.',
-        },
-        {
-          role: 'user',
-          content: `
-              User request: "${prompt}"
-
-              Return recommendations in this JSON format:
-              {
-                "movies": ["Movie title", ...],
-                "tvShows": ["TV show title", ...]
-              }
-
-              Rules:
-              - Use original English titles
-              - Max 6 items per category
-              - If only movies or only TV shows are requested, return only that field
-              - No extra text, JSON only
-              `,
-        },
-      ],
-      max_tokens: 300,
-      response_format: { type: 'json_object' },
-    };
-
-    const openAiResponse = await fetch(openAiUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${openAiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(openAiRequestBody),
-    });
-
-    if (!openAiResponse.ok) {
-      const errorData = await openAiResponse.json().catch(() => ({}));
+    // Get AI recommendations using centralized service
+    let recommendations;
+    try {
+      recommendations = await getAIRecommendations(prompt);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to get AI recommendations';
       return createErrorResponse(
-        `OpenAI API error: ${errorData.error?.message || openAiResponse.statusText}`,
-        openAiResponse.status,
+        `OpenAI API error: ${errorMessage}`,
+        500,
         true,
       );
-    }
-
-    const openAiData: OpenAIResponse = await openAiResponse.json();
-    const content = openAiData.choices[0]?.message?.content;
-
-    if (!content) {
-      return createErrorResponse('No content received from OpenAI', 500, true);
-    }
-
-    let recommendations: Recommendations;
-    try {
-      recommendations = JSON.parse(content);
-    } catch {
-      return createErrorResponse('Failed to parse OpenAI response', 500, true);
     }
 
     if (
